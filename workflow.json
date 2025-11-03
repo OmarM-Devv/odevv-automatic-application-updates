@@ -21,7 +21,7 @@
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
-          "id": "lrGVFZ378RRUcBBu",
+          "id": "",
           "name": "Gmail account"
         }
       }
@@ -37,17 +37,17 @@
         },
         "documentId": {
           "__rl": true,
-          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "Applications 2025-26",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "options": {}
       },
@@ -61,7 +61,7 @@
       "name": "Google Sheets Trigger",
       "credentials": {
         "googleSheetsTriggerOAuth2Api": {
-          "id": "4giBvv0bcXbhIzNk",
+          "id": "",
           "name": "Google Sheets Trigger account"
         }
       }
@@ -128,10 +128,10 @@
       ],
       "id": "b8133e7d-770c-47ea-b3a9-60a7da09cbd3",
       "name": "Get a message",
-      "webhookId": "de0f4549-a3cd-4eef-81b6-5637b280f167",
+      "webhookId": "",
       "credentials": {
         "gmailOAuth2": {
-          "id": "lrGVFZ378RRUcBBu",
+          "id": "",
           "name": "Gmail account"
         }
       }
@@ -189,17 +189,17 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "Applications 2025-26",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -276,7 +276,7 @@
       "name": "Append or update row",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "SVTL61gQWhD8miRm",
+          "id": "",
           "name": "Google Sheets account"
         }
       }
@@ -287,7 +287,7 @@
           "__rl": true,
           "value": "gpt-5-nano",
           "mode": "list",
-          "cachedResultName": "GPT-5-NANO"
+          "cachedResultName": ""
         },
         "messages": {
           "values": [
@@ -308,7 +308,7 @@
       "name": "Classify email",
       "credentials": {
         "openAiApi": {
-          "id": "fKpecpB2AHpA08nY",
+          "id": "",
           "name": "OpenAi account"
         }
       }
@@ -336,17 +336,17 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "Applications 2025-26",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "options": {}
       },
@@ -360,7 +360,7 @@
       "name": "Get row(s) in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "SVTL61gQWhD8miRm",
+          "id": "",
           "name": "Google Sheets account"
         }
       }
@@ -517,15 +517,15 @@
         "resource": "message",
         "guildId": {
           "__rl": true,
-          "value": "607292842259382272",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "BRUH",
-          "cachedResultUrl": "https://discord.com/channels/607292842259382272"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "sendTo": "user",
         "userId": {
           "__rl": true,
-          "value": "542459999746785290",
+          "value": "",
           "mode": "id"
         },
         "content": "=ACTION NEEDED: {{ $json.daysLeft }} DAYS LEFT for {{ $json.company }}: {{ $json.role }}",
@@ -539,10 +539,10 @@
       ],
       "id": "99d9e6ad-a3e5-4618-887d-53984328d265",
       "name": "Alert user about deadline",
-      "webhookId": "628b9e40-14cd-4555-a20b-de223b8d6fef",
+      "webhookId": "",
       "credentials": {
         "discordBotApi": {
-          "id": "pR3RCsOf1NbotajK",
+          "id": "",
           "name": "Discord Bot account"
         }
       }
@@ -566,15 +566,15 @@
         "resource": "message",
         "guildId": {
           "__rl": true,
-          "value": "607292842259382272",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "BRUH",
-          "cachedResultUrl": "https://discord.com/channels/607292842259382272"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "sendTo": "user",
         "userId": {
           "__rl": true,
-          "value": "542459999746785290",
+          "value": "",
           "mode": "id"
         },
         "content": "={{ $json.message }}",
@@ -588,10 +588,10 @@
       ],
       "id": "e45f1494-87b0-42a8-86c2-1aefc6f97648",
       "name": "Alert user about job update",
-      "webhookId": "628b9e40-14cd-4555-a20b-de223b8d6fef",
+      "webhookId": "",
       "credentials": {
         "discordBotApi": {
-          "id": "pR3RCsOf1NbotajK",
+          "id": "",
           "name": "Discord Bot account"
         }
       }
@@ -766,6 +766,6 @@
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "18ba0ff75faa9fd15e8f314ad07b822a180137ffed118b9b62b2484d01d1164e"
+    "instanceId": ""
   }
 }
