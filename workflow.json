@@ -1,0 +1,771 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -384,
+        0
+      ],
+      "id": "ed51e5f8-44ca-4320-9b1b-fb117b61565d",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lrGVFZ378RRUcBBu",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "mode": "list",
+          "cachedResultName": "Applications 2025-26",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        304
+      ],
+      "id": "b176d61a-4d62-4c70-b74c-1e671d38b9b4",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "4giBvv0bcXbhIzNk",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## #1. Listen to email updates & update spreadsheet\n",
+        "height": 256,
+        "width": 1136,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "512dc05e-6f34-4e08-91b9-0ed78b69627d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## #2. Notify user about any updates to application(s)\n",
+        "height": 288,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "d8f03e18-f97e-492b-b569-45d8526f9613",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## #3. Remind user about any important events\n",
+        "height": 576,
+        "width": 560,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        128,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "c1ce636d-cbce-4b1a-aa36-91f8576a00f5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}",
+        "simple": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "b8133e7d-770c-47ea-b3a9-60a7da09cbd3",
+      "name": "Get a message",
+      "webhookId": "de0f4549-a3cd-4eef-81b6-5637b280f167",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lrGVFZ378RRUcBBu",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let relevant = false;\nif ($json.labelIds[0] == \"CATEGORY_PROMOTIONS\"){\n  return {\n    relevant\n  }\n}\n\nconst relevantWords = ['application', 'job', 'interest', 'career', 'position', 'assessment', 'interview'];\n// @ts-ignore\nconst subjectText = $json.headers.subject.toLowerCase();\nconst bodyText = $json.text.toLowerCase()\nfor (const word of relevantWords){\n  if (subjectText.includes(word) || bodyText.includes(word)){\n    relevant = true\n    return {\n      relevant\n    }\n  }\n}\n\nreturn {\n  relevant\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "11f80c9d-9da3-46b0-8798-2afdbf1d8cae",
+      "name": "Filter relevant emails"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1f30fee1-43e1-48da-9565-be6e5bc4c596",
+              "leftValue": "={{ $json.relevant }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        0
+      ],
+      "id": "e01d3b4d-b907-432f-a967-c5eb4b62c927",
+      "name": "If email is relevant"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "mode": "list",
+          "cachedResultName": "Applications 2025-26",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "COMPANY": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('COMPANY__using_to_match_', ``, 'string') }}",
+            "ROLE": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ROLE', ``, 'string') }}",
+            "DATE APPLIED": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('DATE_APPLIED', ``, 'string') }}",
+            "STATUS": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('STATUS', ``, 'string') }}",
+            "ACTION DEADLINE": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ACTION_DEADLINE', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "COMPANY"
+          ],
+          "schema": [
+            {
+              "id": "COMPANY",
+              "displayName": "COMPANY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ROLE",
+              "displayName": "ROLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "DATE APPLIED",
+              "displayName": "DATE APPLIED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ACTION DEADLINE",
+              "displayName": "ACTION DEADLINE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        16
+      ],
+      "id": "5845208c-3a31-415b-9c9f-5de5f122ba4b",
+      "name": "Append or update row",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SVTL61gQWhD8miRm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-5-NANO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an AI assistant that manages & updates job applications made by the user. Analyse any emails received and determine whether it is about a job application (e.g., an email confirming that the application has been received, or an email inviting to an interview, or a reminder to apply to a saved job).If the email is not about a job application, you don't need to output any message. If the email is about a job suggestion, ignore it. Only take into considerations emails where the user seems to have applied or taken interest in a job (e.g. maybe the user saved but not applied to a job). If the email is about a job application, you must classify it into the following categories:\n\n- To apply (eg to a saved job, or a job recommended by a friend)\n- Application received\n- Application rejected\n- Invited to an assessment\n- Invited to an interview\n- Assessment done confirmation\n- Interview done confirmation\n- Other (before choosing this category, do a final check to see which category it fits the best; try to avoid this category)\n\nHere is what you should do after classifying the email, depending on what category you have chosen:\n- To apply:\n  - Add a new row, filling out appropriate values for COMPANY, ROLE (simplify if the role name is too long, but without losing meaning; aim for 2-5 words) and STATUS (value should be TO APPLY).\n- Application received:\n  - Add a new row, filling out appropriate values for COMPANY, ROLE (simplify if the role name is too long, but without losing meaning; aim for 2-5 words), DATE APPLIED (which is {{$now}}, only put the date, in the format dd/mm/yyyy), STATUS (value should be APPLIED), and ACTION DEADLINE (generally empty). After creating a new row, don't ever make any changes to the DATE APPLIED column when updating a row (unless the row is being deleted)\n\n- Application rejected\n  - Update the STATUS column on the corresponding row to REJECTED\n\n- Invited to an assessment OR interview\n  - Update the STATUS column on the corresponding row to ASSESSMENT OR INTERVIEW (whichever one is appropriate), and add the deadline included in the email to the ACTION DEADLINE column; otherwise, leave it empty. \n  - You should put the date in the format \"dd/mm/yyyy hh:mm:ss\". Specify the time if it is included in the email; otherwise, leave it as 0:00:00.\n  - Make sure to convert the time (and date if needed; you may need to move a day forward or backwards if the time is converted) to UTC+1 (London) if the email includes the time in a different timezone.\n\n- Assessment OR interview done\n  - Update the STATUS column on the corresponding row to ASSESSMENT DONE OR INTERVIEW DONE (whichever one is appropriate)\n\n- Other\n  - Update the STATUS column on the corresponding row to UNKNOWN\n\nWhen trying to match with a row before making changes to the spreadsheet, you should always use the COMPANY NAME and ROLE columns to match with a row. If, when trying to update a row, a match is not found (i.e., there's no row to update, and the application is not initially stored), create a new row just as you would when a new application is received, but add appropriate values for STATUS and ACTION DEADLINE (if applicable).\n\nThis is the email received:\n{{ $('Get a message').item.json.subject }}\n{{ $('Get a message').item.json.text }}\n\nIn terms of text output, just output the email category + \"action taken/not taken\" depending on whether action has been taken"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        256,
+        0
+      ],
+      "id": "5fcbb82b-e0a3-4306-b31c-64e9f084bcdb",
+      "name": "Classify email",
+      "credentials": {
+        "openAiApi": {
+          "id": "fKpecpB2AHpA08nY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        192,
+        304
+      ],
+      "id": "ef9416af-ee27-4260-b29b-2ccbdf0d8de0",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE",
+          "mode": "list",
+          "cachedResultName": "Applications 2025-26",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jh-kewGftP0xe3C1HzwGhwhARBEUinploUxNjagU8CE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        304
+      ],
+      "id": "b7c7ee81-b376-4ccb-af58-72959489ef87",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SVTL61gQWhD8miRm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1724632f-907c-41e2-a7e5-19ddbe819fd7",
+              "leftValue": "={{ $json.STATUS }}",
+              "rightValue": "TO APPLY",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "2f7f9566-73d5-4d77-8599-749cb1fdb9eb",
+              "leftValue": "={{ $json.STATUS }}",
+              "rightValue": "ASSESSMENT",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "5f233eb0-0eb7-4878-a24b-b8b5c831a9f5",
+              "leftValue": "={{ $json.STATUS }}",
+              "rightValue": "INTERVIEW",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "94ba33f9-60da-48d5-ba84-a46fb85dc541",
+              "leftValue": "={{ $json.STATUS }}",
+              "rightValue": "UNKNOWN",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        304
+      ],
+      "id": "193a4c36-ee88-437f-9368-7edf5f52269f",
+      "name": "Filter pending jobs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1724632f-907c-41e2-a7e5-19ddbe819fd7",
+              "leftValue": "={{ $json['ACTION DEADLINE'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        464
+      ],
+      "id": "4f3a73bb-98d4-4044-a569-b7e6f381bf14",
+      "name": "Filter empty deadlines"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "//function toDate(x){\n//  return new Date((x - 25569) * 86400 * 1000)\n//}\n\nfunction toSerial(x){\n  return Math.floor(x / (1000 * 60 * 60 * 24) + 25569)\n}\n\nfunction subtractDays(end, today){\n  return end - today\n}\n\nlet deadline = $json['ACTION DEADLINE'] //toDate($json['ACTION DEADLINE'])\nlet now = toSerial(new Date().getTime())\nlet daysLeft = subtractDays(deadline, now)\n\nif (daysLeft == 7 || daysLeft == 4 || daysLeft == 1){\n  let company = $json.COMPANY\n  let role = $json.ROLE\n  return {daysLeft, company, role}\n}\n\nreturn {}\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        464
+      ],
+      "id": "943c0b51-d9a8-4997-8d09-ee90cb3ade75",
+      "name": "Get days left"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f0c0a0f4-3fa4-4e78-97b7-2f699ce280ee",
+              "leftValue": "={{ $json.daysLeft }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        464
+      ],
+      "id": "252060fa-658c-4879-9735-d7ebcd847918",
+      "name": "Filter no alert req"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "607292842259382272",
+          "mode": "list",
+          "cachedResultName": "BRUH",
+          "cachedResultUrl": "https://discord.com/channels/607292842259382272"
+        },
+        "sendTo": "user",
+        "userId": {
+          "__rl": true,
+          "value": "542459999746785290",
+          "mode": "id"
+        },
+        "content": "=ACTION NEEDED: {{ $json.daysLeft }} DAYS LEFT for {{ $json.company }}: {{ $json.role }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        192,
+        624
+      ],
+      "id": "99d9e6ad-a3e5-4618-887d-53984328d265",
+      "name": "Alert user about deadline",
+      "webhookId": "628b9e40-14cd-4555-a20b-de223b8d6fef",
+      "credentials": {
+        "discordBotApi": {
+          "id": "pR3RCsOf1NbotajK",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let message = ''\nswitch ($json.STATUS){\n  case 'APPLIED': message = $json.COMPANY + ': application RECEIVED for ' + $json.ROLE; break\n  case 'REJECTED': message = $json.COMPANY + ': REJECTED for ' + $json.ROLE; break\n  case 'ASSESSMENT': message = $json.COMPANY + ': ' + 'invited to an ASSESSMENT for ' + $json.ROLE + '. For more details...'; break;\n  case 'INTERVIEW': message = $json.COMPANY + ': ' + 'invited to an INTERVIEW for ' + $json.ROLE + '. For more details...'; break;\n  case 'ASSESSMENT DONE': message = $json.COMPANY + ': ' + 'assessment RECEIVED for ' + $json.ROLE + '. For more details...'; break;\n  case 'INTERVIEW DONE': message = $json.COMPANY + ': ' + 'interview RECEIVED for ' + $json.ROLE + '. For more details...'; break;\n  case 'TO APPLY': message = $json.COMPANY + ': ' + 'job suggestion: ' + $json.ROLE + '. For more details...'; break;\n  //case 'UNKNOWN': ;\n  default: message = 'error while choosing message';\n}\nreturn {\n  message\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        304
+      ],
+      "id": "34a5bd46-ce5e-4336-8a2f-c83425d2bad8",
+      "name": "Choose message"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "607292842259382272",
+          "mode": "list",
+          "cachedResultName": "BRUH",
+          "cachedResultUrl": "https://discord.com/channels/607292842259382272"
+        },
+        "sendTo": "user",
+        "userId": {
+          "__rl": true,
+          "value": "542459999746785290",
+          "mode": "id"
+        },
+        "content": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        304
+      ],
+      "id": "e45f1494-87b0-42a8-86c2-1aefc6f97648",
+      "name": "Alert user about job update",
+      "webhookId": "628b9e40-14cd-4555-a20b-de223b8d6fef",
+      "credentials": {
+        "discordBotApi": {
+          "id": "pR3RCsOf1NbotajK",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## JOB APPLICATION UPDATES WORKFLOW + GOOGLE SHEETS AI AGENT\n1. Reads incoming emails, decides if they're relevant, and updates the spreadsheet if needed\n\n2. Any updates in the spreadsheet are sent to the user via message\n\n3. Every day at 10 am the workflow checks the deadlines for any jobs that require action, and alerts the user via message up to 3 times before the deadline.\n\n",
+        "height": 256,
+        "width": 544,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        528
+      ],
+      "typeVersion": 1,
+      "id": "10e5f7b4-b432-4a18-a722-f7ab626f9b50",
+      "name": "Sticky Note3"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Choose message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message": {
+      "main": [
+        [
+          {
+            "node": "Filter relevant emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter relevant emails": {
+      "main": [
+        [
+          {
+            "node": "If email is relevant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If email is relevant": {
+      "main": [
+        [
+          {
+            "node": "Classify email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row": {
+      "ai_tool": [
+        [
+          {
+            "node": "Classify email",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify email": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter pending jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter pending jobs": {
+      "main": [
+        [
+          {
+            "node": "Filter empty deadlines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter empty deadlines": {
+      "main": [
+        [
+          {
+            "node": "Get days left",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get days left": {
+      "main": [
+        [
+          {
+            "node": "Filter no alert req",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter no alert req": {
+      "main": [
+        [
+          {
+            "node": "Alert user about deadline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Choose message": {
+      "main": [
+        [
+          {
+            "node": "Alert user about job update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "18ba0ff75faa9fd15e8f314ad07b822a180137ffed118b9b62b2484d01d1164e"
+  }
+}
