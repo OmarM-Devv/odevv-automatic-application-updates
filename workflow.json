@@ -765,7 +765,7 @@
   },
   "pinData": {},
   "meta": {
-    "templateCredsSetupCompleted": true,
+    "templateCredsSetupCompleted": false,
     "instanceId": ""
   }
 }
