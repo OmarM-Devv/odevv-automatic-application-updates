@@ -467,8 +467,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "//function toDate(x){\n//  return new Date((x - 25569) * 86400 * 1000)\n//}\n\nfunction toSerial(x){\n  return Math.floor(x / (1000 * 60 * 60 * 24) + 25569)\n}\n\nfunction subtractDays(end, today){\n  return end - today\n}\n\nlet deadline = $json['ACTION DEADLINE'] //toDate($json['ACTION DEADLINE'])\nlet now = toSerial(new Date().getTime())\nlet daysLeft = subtractDays(deadline, now)\n\nif (daysLeft == 7 || daysLeft == 4 || daysLeft == 1){\n  let company = $json.COMPANY\n  let role = $json.ROLE\n  return {daysLeft, company, role}\n}\n\nreturn {}\n\n"
-      },
+        "jsCode": "// Convert a JS timestamp (ms) → Excel serial date (days)\nfunction toSerial(x){\n  return Math.floor(x / (1000 * 60 * 60 * 24) + 25569);\n}\n\n// Parse \"24/11/2025 9:00:00\" → JS Date\nfunction parseDateString(str) {\n  // str format: DD/MM/YYYY HH:mm:ss\n  const [datePart, timePart] = str.split(' ');\n  const [day, month, year] = datePart.split('/').map(Number);\n  const [hour, minute, second] = timePart.split(':').map(Number);\n\n  return new Date(year, month - 1, day, hour, minute, second);\n}\n\nfunction subtractDays(end, today){\n  return end - today;\n}\n\nlet deadline = parseDateString($json['ACTION DEADLINE']);\nlet deadlineSerial = toSerial(deadline.getTime());\n\nlet nowSerial = toSerial(new Date().getTime());\n\nlet daysLeft = subtractDays(deadlineSerial, nowSerial);\n\nif (daysLeft == 7 || daysLeft == 4 || daysLeft == 1){\n  let company = $json.COMPANY;\n  let role = $json.ROLE;\n  return {daysLeft, company, role};\n}\n\nreturn {};\n"      },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
